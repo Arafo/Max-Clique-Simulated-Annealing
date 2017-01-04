@@ -20,13 +20,7 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		args = new String[6];
-		args[0] = "-f";
-		args[1] = "frb35-17-1.clq";
-		args[2] = "-t";
-		args[3] = "1";
-		args[4] = "-r";
-		args[5] = "10";
+		args = new String[]{"-f", "grafos/frb30-15-1.clq", "-t",  "1", "-r", "10"};
 		
 		// java -f fichero -t tipo -r repeticiones -
 		for (int i = 0; i < args.length; i++) {
