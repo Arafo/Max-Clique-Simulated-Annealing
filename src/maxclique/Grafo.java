@@ -1,3 +1,10 @@
+/** 
+ *  @file    Grafo.java
+ *  @author  Rafael Marcén Altarriba (650435)
+ *  @date    07/01/2017  
+ *  @version 1.0 
+ */
+
 package maxclique;
 
 import java.util.ArrayList;
@@ -10,29 +17,41 @@ public class Grafo {
 	private final Map<Integer, Vertice> vertices = new TreeMap<Integer, Vertice>();
 	private final List<Arista> aristas = new ArrayList<Arista>();
 	
+	/**
+	 * Constructor
+	 * @param array
+	 */
 	public Grafo(int[][] array) {
 		for (int i = 0; i < array.length; i++) {
-			//System.out.print("Vertice: " + i);
 			Vertice v = getVertice(i);
 			for (int edgeTo : array[i]) {
 				Vertice v2 = getVertice(edgeTo);
 				Arista e;
 				if ((e = v2.getAristaA(v)) == null) {
-					//System.out.print(", Arista: " + edgeTo + "-" + v.getIndice() + " ");
 					e = new Arista(v, v2);
 					aristas.add(e);
                     v.addArista(e);
                     v2.addArista(e);    
 				}	
 			}
-			//System.out.println();
 		}
 	}
 	
+	/**
+	 * Añade el vertice <v> al grafo
+	 * @param v
+	 */
 	public void addVertice(Vertice v) {
 		vertices.put(v.getIndice(), v);	
 	}
 	
+	/**
+	 * Devuelve el vertice cuyo indice es indice <indice>.
+	 * Si dicho vertice no existe en el grafo, lo añade y lo
+	 * devuelve
+	 * @param indice
+	 * @return
+	 */
 	public Vertice getVertice(int indice) {
 		Vertice v;
 		
@@ -43,10 +62,18 @@ public class Grafo {
 		return v;	
 	}
 	
+	/**
+	 * Devuelve la lista de vertices del grafo
+	 * @return
+	 */
 	public Map<Integer, Vertice> getVertices() {
 		return vertices;
 	}
-
+	
+	/**
+	 * Devuelve la lista de arista del grafo
+	 * @return
+	 */
 	public List<Arista> getAristas() {
 		return aristas;
 	}
@@ -87,20 +114,21 @@ public class Grafo {
 		return sb.toString();
 	}
 	
+	/**
+	 * Formato de Wolfram Alpha
+	 * @param array
+	 * @return
+	 */
 	public String GrafoWolfram(int[][] array) {
 		StringBuilder sb = new StringBuilder();
 		int ind = 0;
 		
 		sb.append("GraphPlot[{");
-		//sb.append(array.length + "\n");
 		for (int[] adj : array) {
-			//sb.append(i + " -> ");
 			for (int i : adj) {
 				sb.append(ind + " -> " + i + ", ");
-				//sb.append(" " + i);	
 			}
 			ind++;
-			//sb.append("\n");		
 		}
 		sb.replace(sb.length() - 2, sb.length() - 1, "");
 		sb.append("}, VertexLabeling -> True]");

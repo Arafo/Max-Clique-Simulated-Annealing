@@ -1,3 +1,10 @@
+/** 
+ *  @file    Main.java
+ *  @author  Rafael Marcén Altarriba (650435)
+ *  @date    07/01/2017  
+ *  @version 1.0 
+ */
+
 package maxclique;
 
 import java.io.BufferedReader;
@@ -12,17 +19,16 @@ import java.util.regex.Pattern;
 
 public class Main {
 	
-	private static double temperatura = 10000;
+	private static double temperatura = 20000;
     private static double enfriamiento = 0.03;
-    private static int repeticiones = 10;
-    private static String fichero;
-    private static int tipoFichero; // 0 -> matriz, 1 ->
+    private static int repeticiones = 100;
+    private static String fichero = "grafos/frb50-23-1.clq";
+    private static int tipoFichero = 1; // 0 -> matriz adyacencia, 1 -> grafo ASCII DIMACS
 
 
 	public static void main(String[] args) {
-		args = new String[]{"-f", "grafos/frb30-15-1.clq", "-t",  "1", "-r", "10"};
 		
-		// java -f fichero -t tipo -r repeticiones -
+		// java maxclique.Main -f <fichero> -t <tipo> -r <repeticiones> -
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equals("-f")) 
 				fichero = args[i + 1];
@@ -35,15 +41,11 @@ public class Main {
 		int[][] array = null;
 		System.out.print("Leyendo grafo...");
 		if (tipoFichero == 0)
-			array = getArray(fichero);
+			array = getMatriz(fichero);
 		else if (tipoFichero == 1)		
 			array = getGrafo(fichero);		
 		Grafo grafo = new Grafo(array);
 		System.out.println(" HECHO");
-		
-		//System.out.println(grafo.toString());
-		//System.out.println(grafo.AdjString(array));
-		//System.out.println(grafo.GrafoWolfram(array));
 
 		long tiempo;
 		SimulatedAnnealing sa;
@@ -75,6 +77,11 @@ public class Main {
 		System.out.println("MEDIA TIEMPO: " + mediaTiempo / repeticiones + " ms");
 	}
 	
+	/**
+	 * Formato de matriz adyacente
+	 * @param fichero
+	 * @return
+	 */
 	public static int[][] getGrafo(String fichero) {
 		try(BufferedReader in = new BufferedReader(new FileReader(fichero))) {
 			Map<Integer, List<Integer>> grafo = new LinkedHashMap<Integer, List<Integer>>();
@@ -109,8 +116,6 @@ public class Main {
 				} 			
 			}
 			
-			//System.out.println(grafo);
-			//System.out.println(vertices);
 			int[][] array = new int[vertices][];
 			for (Map.Entry<Integer, List<Integer>> entry : grafo.entrySet()) {
 				List<Integer> adjList = entry.getValue();
@@ -118,18 +123,21 @@ public class Main {
 				for (int i = 0; i < adj.length; i++) {
 					adj[i] = adjList.get(i);
 				}
-				//System.out.println(entry.getKey());
 
 				array[entry.getKey() - 1] = adj;
 			}
 			return array;
-			//return grafo.toString();					
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Bad file: " + fichero);	
 		}
 	}
 
-	public static int[][] getArray(String relPath) {
+	/**
+	 * Formato DIMACS ASCII
+	 * @param relPath
+	 * @return
+	 */
+	public static int[][] getMatriz(String relPath) {
 
 		Map<Integer, List<Integer>> vertices = new LinkedHashMap<Integer, List<Integer>>();
 

@@ -1,3 +1,10 @@
+/** 
+ *  @file    SimulatedAnnealing.java
+ *  @author  Rafael Marcén Altarriba (650435)
+ *  @date    07/01/2017  
+ *  @version 1.0 
+ */
+
 package maxclique;
 
 import java.util.ArrayList;
@@ -12,11 +19,22 @@ public class SimulatedAnnealing {
     private double enfriamiento = 0.03;
     //private double ka = 1.38064852e-23;
 
+    /**
+     * Constructor
+     * @param temperatura
+     * @param enfriamiento
+     */
 	public SimulatedAnnealing(double temperatura, double enfriamiento) {
 		this.temperatura = temperatura;
 		this.enfriamiento = enfriamiento;
 	}
 	
+	/**
+	 * Algoritmo de simulated annealing. Devuelve el tamaño
+	 * del clique maximo del grafo <g>
+	 * @param g
+	 * @return
+	 */
 	public int solucionar(Grafo g) {
 		        
 		Clique actual = new Clique();
@@ -32,7 +50,7 @@ public class SimulatedAnnealing {
 			verticesOrdenados.add(new Tupla(v, adyacentes.size()));
 		}
 		
-		// Ordenar por el nÃºmero de vertices adyacentes
+		// Ordenar por el numero de vertices adyacentes
 		Collections.sort(verticesOrdenados, new Comparator<Tupla>() {
 	        @Override
 	        public int compare(Tupla t2, Tupla t1) {
@@ -86,11 +104,17 @@ public class SimulatedAnnealing {
         return mejor.getClique().size();
 	}
 	
+	/**
+	 * Devuelve la probabilidad de aceptar la nueva solucion
+	 * @param energia
+	 * @param nuevaEnergia
+	 * @param temperatura
+	 * @return
+	 */
 	public double probabilidadAceptar(int energia, int nuevaEnergia, double temperatura) {
         if (nuevaEnergia > energia) {
             return 1.0;
         }
-        //System.out.println(Math.exp(-((energia - nuevaEnergia) / temperatura)));
         return (energia - nuevaEnergia) / temperatura;
     }
 }
